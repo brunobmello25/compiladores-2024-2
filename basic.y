@@ -22,6 +22,7 @@ int yylex(void);
 
 %token <num> NUMBER
 %token <id> IDENTIFIER
+%token <str> STRING
 %token PRINT IF THEN ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
 %token EQ NE LE GE
 
@@ -115,6 +116,9 @@ factor:
     NUMBER {
         $$ = malloc(20);
         sprintf($$, "%d", $1);
+    }
+    | STRING {
+        $$ = strdup($1);
     }
     | IDENTIFIER {
         $$ = strdup($1);

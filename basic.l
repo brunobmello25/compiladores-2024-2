@@ -7,6 +7,7 @@ DIGIT       [0-9]
 LETTER      [a-zA-Z]
 IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 NUMBER      {DIGIT}+
+STRING      \"([^\\\"]|\\.)*\"
 
 %%
 
@@ -36,6 +37,7 @@ NUMBER      {DIGIT}+
 "("          { return '('; }
 ")"          { return ')'; }
 {NUMBER}     { yylval.num = atoi(yytext); return NUMBER; }
+{STRING}     { yylval.str = strdup(yytext); return STRING; }
 {IDENTIFIER} { yylval.id = strdup(yytext); return IDENTIFIER; }
 [ \t\n]      ;  // Ignorar espaços em branco
 .            { return yytext[0]; }
