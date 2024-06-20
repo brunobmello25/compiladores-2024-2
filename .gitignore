@@ -1,0 +1,4 @@
+*.tab.c
+*.tab.h
+compiler
+lex.yy.c
