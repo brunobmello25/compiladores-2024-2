@@ -22,7 +22,7 @@ int yylex(void);
 
 %token <num> NUMBER
 %token <id> IDENTIFIER
-%token PRINT IF THEN ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT
+%token PRINT IF THEN ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
 %token EQ NE LE GE
 
 %type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression term factor condition comparison_op
@@ -48,8 +48,8 @@ statement:
     ;
 
 assignment:
-    IDENTIFIER '=' expression {
-        generate_assignment($1, $3);
+    LET IDENTIFIER '=' expression {
+        generate_assignment($2, $4);
     }
     ;
 

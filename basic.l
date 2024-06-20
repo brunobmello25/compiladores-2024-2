@@ -21,6 +21,7 @@ NUMBER      {DIGIT}+
 "TO"         { return TO; }
 "NEXT"       { return NEXT; }
 "INPUT"      { return INPUT; }
+"LET"        { return LET; }
 "="          { return '='; }
 "=="         { return EQ; }
 "!="         { return NE; }

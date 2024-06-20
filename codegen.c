@@ -4,15 +4,16 @@
 #include "codegen.h"
 
 void generate_program() {
-    // Placeholder: implementar a lógica de geração de código Python para o programa
+    // No additional code needed for the whole program, 
+    // as we generate and print statements as they are parsed
 }
 
 void generate_statement_list() {
-    // Placeholder: implementar a lógica de geração de código Python para a lista de declarações
+    // Each statement is printed individually, no additional code needed here
 }
 
 void generate_statement() {
-    // Placeholder: implementar a lógica de geração de código Python para a declaração
+    // Each specific statement type is handled in its own function
 }
 
 void generate_assignment(char *id, char *expr) {
@@ -40,15 +41,15 @@ void generate_input(char *id) {
 }
 
 void generate_expression(char *expr) {
-    // Placeholder: implementar a lógica de geração de código Python para a expressão
+    printf("%s", expr);
 }
 
 void generate_term(char *term) {
-    // Placeholder: implementar a lógica de geração de código Python para o termo
+    printf("%s", term);
 }
 
 void generate_factor(char *factor) {
-    // Placeholder: implementar a lógica de geração de código Python para o fator
+    printf("%s", factor);
 }
 
 void generate_condition(char *left, char *op, char *right) {
@@ -56,6 +57,6 @@ void generate_condition(char *left, char *op, char *right) {
 }
 
 void generate_comparison_op(char *op) {
-    // Placeholder: implementar a lógica de geração de código Python para o operador de comparação
+    printf("%s", op);
 }
 
