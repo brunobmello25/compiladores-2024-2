@@ -23,10 +23,10 @@ int yylex(void);
 %token <num> NUMBER
 %token <id> IDENTIFIER
 %token <str> STRING
-%token PRINT IF THEN ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
+%token PRINT IF THEN ELSE ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
 %token EQ NE LE GE
 
-%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression term factor condition comparison_op
+%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op else_part
 
 %%
 
@@ -40,12 +40,13 @@ statement_list:
     ;
 
 statement:
-    assignment { /* No $1, $2, $3 are defined here */ }
-    | print { /* No $1, $2 are defined here */ }
-    | if_statement { /* No $1, $2, $3, $4 are defined here */ }
-    | while_statement { /* No $1, $2, $3, $4 are defined here */ }
-    | for_statement { /* No $1, $2, $3, $4, $5, $6, $7, $8 are defined here */ }
-    | input { /* No $1, $2 are defined here */ }
+    assignment { generate_statement(); }
+    | print { generate_statement(); }
+    | if_statement { generate_statement(); }
+    | while_statement { generate_statement(); }
+    | for_statement { generate_statement(); }
+    | input { generate_statement(); }
+    | expression_statement { generate_statement(); }
     ;
 
 assignment:
@@ -61,9 +62,14 @@ print:
     ;
 
 if_statement:
-    IF condition THEN statement_list ENDIF {
-        generate_if($2, $4);
+    IF condition THEN statement_list else_part ENDIF {
+        generate_if($2, $4, $5);
     }
+    ;
+
+else_part:
+    ELSE statement_list { $$ = $2; }
+    | { $$ = NULL; }
     ;
 
 while_statement:
@@ -84,17 +90,19 @@ input:
     }
     ;
 
+expression_statement:
+    expression { generate_expression_statement($1); }
+    ;
+
 expression:
     term { $$ = $1; }
     | term '+' expression {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s + %s", $1, $3);
-        generate_expression($$);
     }
     | term '-' expression {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s - %s", $1, $3);
-        generate_expression($$);
     }
     ;
 
@@ -103,12 +111,10 @@ term:
     | factor '*' term {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s * %s", $1, $3);
-        generate_term($$);
     }
     | factor '/' term {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s / %s", $1, $3);
-        generate_term($$);
     }
     ;
 
@@ -132,7 +138,6 @@ condition:
     expression comparison_op expression {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s %s %s", $1, $2, $3);
-        generate_condition($1, $2, $3);
     }
     ;
 

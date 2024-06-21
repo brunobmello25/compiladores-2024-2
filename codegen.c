@@ -24,8 +24,11 @@ void generate_print(char *expr) {
     printf("print(%s)\n", expr);
 }
 
-void generate_if(char *cond, char *stmt_list) {
-    printf("if %s:\n%s\n", cond, stmt_list);
+void generate_if(char *cond, char *stmt_list, char *else_part) {
+    printf("if %s:\n%s", cond, stmt_list);
+    if (else_part) {
+        printf("else:\n%s", else_part);
+    }
 }
 
 void generate_while(char *cond, char *stmt_list) {
@@ -40,16 +43,20 @@ void generate_input(char *id) {
     printf("%s = input()\n", id);
 }
 
+void generate_expression_statement(char *expr) {
+    printf("%s\n", expr);
+}
+
 void generate_expression(char *expr) {
-    printf("%s", expr);
+    // No need to print here
 }
 
 void generate_term(char *term) {
-    printf("%s", term);
+    // No need to print here
 }
 
 void generate_factor(char *factor) {
-    printf("%s", factor);
+    // No need to print here
 }
 
 void generate_condition(char *left, char *op, char *right) {
