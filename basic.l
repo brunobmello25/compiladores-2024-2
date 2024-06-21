@@ -13,11 +13,11 @@ STRING      \"([^\\\"]|\\.)*\"
 
 "PRINT"      { return PRINT; }
 "IF"         { return IF; }
+"ELSE"       { return ELSE; }
 "THEN"       { return THEN; }
-"ENDIF"      { return ENDIF; }
+"END"        { return END; }
 "WHILE"      { return WHILE; }
 "DO"         { return DO; }
-"ENDWHILE"   { return ENDWHILE; }
 "FOR"        { return FOR; }
 "TO"         { return TO; }
 "NEXT"       { return NEXT; }

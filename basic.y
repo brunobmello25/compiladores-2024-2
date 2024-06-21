@@ -23,7 +23,7 @@ int yylex(void);
 %token <num> NUMBER
 %token <id> IDENTIFIER
 %token <str> STRING
-%token PRINT IF THEN ELSE ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
+%token PRINT IF THEN ELSE END WHILE DO FOR TO NEXT INPUT LET
 %token EQ NE LE GE
 
 %type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op else_part
@@ -31,10 +31,7 @@ int yylex(void);
 %%
 
 program:
-    statement_list { 
-        $$ = generate_program($1);
-        printf("%s\n", $$);
-    }
+    statement_list { $$ = generate_program($1); printf("%s\n", $$); }
     ;
 
 statement_list:
@@ -65,18 +62,16 @@ print:
     ;
 
 if_statement:
-    IF condition THEN statement_list else_part ENDIF {
-        $$ = generate_if($2, $4, $5);
+    IF condition THEN statement_list END IF {
+        $$ = generate_if($2, $4, NULL);
+    }
+    | IF condition THEN statement_list ELSE statement_list END IF {
+        $$ = generate_if($2, $4, $6);
     }
     ;
 
-else_part:
-    ELSE statement_list { $$ = $2; }
-    | { $$ = NULL; }
-    ;
-
 while_statement:
-    WHILE condition DO statement_list ENDWHILE {
+    WHILE condition DO statement_list END WHILE {
         $$ = generate_while($2, $4);
     }
     ;
