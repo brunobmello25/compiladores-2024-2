@@ -23,65 +23,78 @@ int yylex(void);
 %token <num> NUMBER
 %token <id> IDENTIFIER
 %token <str> STRING
-%token PRINT IF THEN ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
+%token PRINT IF THEN ELSE ENDIF WHILE DO ENDWHILE FOR TO NEXT INPUT LET
 %token EQ NE LE GE
 
-%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression term factor condition comparison_op
+%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op else_part
 
 %%
 
 program:
-    statement_list { generate_program(); }
+    statement_list { 
+        $$ = generate_program($1);
+        printf("%s\n", $$);
+    }
     ;
 
 statement_list:
-    statement { generate_statement_list(); }
-    | statement statement_list { generate_statement_list(); }
+    statement { $$ = $1; }
+    | statement statement_list { $$ = generate_statement_list($1, $2); }
     ;
 
 statement:
-    assignment { /* No $1, $2, $3 are defined here */ }
-    | print { /* No $1, $2 are defined here */ }
-    | if_statement { /* No $1, $2, $3, $4 are defined here */ }
-    | while_statement { /* No $1, $2, $3, $4 are defined here */ }
-    | for_statement { /* No $1, $2, $3, $4, $5, $6, $7, $8 are defined here */ }
-    | input { /* No $1, $2 are defined here */ }
+    assignment { $$ = $1; }
+    | print { $$ = $1; }
+    | if_statement { $$ = $1; }
+    | while_statement { $$ = $1; }
+    | for_statement { $$ = $1; }
+    | input { $$ = $1; }
+    | expression_statement { $$ = $1; }
     ;
 
 assignment:
     LET IDENTIFIER '=' expression {
-        generate_assignment($2, $4);
+        $$ = generate_assignment($2, $4);
     }
     ;
 
 print:
     PRINT expression {
-        generate_print($2);
+        $$ = generate_print($2);
     }
     ;
 
 if_statement:
-    IF condition THEN statement_list ENDIF {
-        generate_if($2, $4);
+    IF condition THEN statement_list else_part ENDIF {
+        $$ = generate_if($2, $4, $5);
     }
+    ;
+
+else_part:
+    ELSE statement_list { $$ = $2; }
+    | { $$ = NULL; }
     ;
 
 while_statement:
     WHILE condition DO statement_list ENDWHILE {
-        generate_while($2, $4);
+        $$ = generate_while($2, $4);
     }
     ;
 
 for_statement:
     FOR IDENTIFIER '=' expression TO expression DO statement_list NEXT IDENTIFIER {
-        generate_for($2, $4, $6, $8);
+        $$ = generate_for($2, $4, $6, $8);
     }
     ;
 
 input:
     INPUT IDENTIFIER {
-        generate_input($2);
+        $$ = generate_input($2);
     }
+    ;
+
+expression_statement:
+    expression { $$ = generate_expression_statement($1); }
     ;
 
 expression:
@@ -89,12 +102,10 @@ expression:
     | term '+' expression {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s + %s", $1, $3);
-        generate_expression($$);
     }
     | term '-' expression {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s - %s", $1, $3);
-        generate_expression($$);
     }
     ;
 
@@ -103,12 +114,10 @@ term:
     | factor '*' term {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s * %s", $1, $3);
-        generate_term($$);
     }
     | factor '/' term {
         $$ = malloc(strlen($1) + strlen($3) + 4);
         sprintf($$, "%s / %s", $1, $3);
-        generate_term($$);
     }
     ;
 
@@ -130,9 +139,7 @@ factor:
 
 condition:
     expression comparison_op expression {
-        $$ = malloc(strlen($1) + strlen($3) + 4);
-        sprintf($$, "%s %s %s", $1, $2, $3);
-        generate_condition($1, $2, $3);
+        $$ = generate_condition($1, $2, $3);
     }
     ;
 
