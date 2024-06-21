@@ -11,3 +11,4 @@ clean:
 	rm basic.tab.c 
 	rm basic.tab.h
 	rm lex.yy.c
+	rm compiler
