@@ -1,3 +1,7 @@
+# TODO:
+
+- [ ] Condições devem poder ser expressões avulsas
+
 # Gramática BASIC
 
 ```
