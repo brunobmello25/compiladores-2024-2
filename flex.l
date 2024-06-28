@@ -1,6 +1,6 @@
 %{
 #include "definitions.h"
-#include "basic.tab.h"
+#include "bison.tab.h"
 %}
 
 DIGIT       [0-9]

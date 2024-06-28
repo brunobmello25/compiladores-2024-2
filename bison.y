@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "definitions.h"
-#include "basic.tab.h"
+#include "bison.tab.h"
 #include "codegen.h"
 
 // Declaração da variável yyin
@@ -17,7 +17,7 @@ int yylex(void);
 %union {
     int num;
     char *id;
-    char *str; // Adicionado para armazenar expressões e outros valores gerados
+    char *str;
 }
 
 %token <num> NUMBER
@@ -26,7 +26,10 @@ int yylex(void);
 %token PRINT IF THEN ELSE ELSEIF END WHILE DO FOR TO NEXT INPUT LET ASSIGN
 %token EQ NE LE GE
 
-%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statement
+%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statements
+
+%precedence IFX
+%nonassoc ELSE
 
 %%
 
@@ -43,7 +46,6 @@ statement:
     assignment { $$ = $1; }
     | print { $$ = $1; }
     | if_statement { $$ = $1; }
-    | elseif_statement { $$ = $1; }
     | while_statement { $$ = $1; }
     | for_statement { $$ = $1; }
     | input { $$ = $1; }
@@ -64,17 +66,33 @@ print:
 
 if_statement:
     IF condition THEN statement_list END IF {
+        printf("a\n");
         $$ = generate_if($2, $4, NULL);
     }
     | IF condition THEN statement_list ELSE statement_list END IF {
+        printf("b\n");
         $$ = generate_if($2, $4, $6);
+    }
+    | IF condition THEN statement_list elseif_statements {
+        printf("c\n");
+        $$ = generate_if_elseif($2, $4, $5);
     }
     ;
 
-elseif_statement:
-    ELSEIF condition THEN statement_list {
-        $$ = generate_elseif($2, $4);
+elseif_statements:
+    ELSEIF condition THEN statement_list END IF {
+        printf("d\n");
+        $$ = generate_elseif($2, $4, NULL);
     }
+    | ELSEIF condition THEN statement_list ELSE statement_list END IF {
+        printf("e\n");
+        $$ = generate_elseif($2, $4, $6);
+    }
+    | ELSEIF condition THEN statement_list elseif_statements {
+        printf("f\n");
+        $$ = generate_elseif($2, $4, $5);
+    }
+    ;
 
 while_statement:
     WHILE condition DO statement_list END WHILE {

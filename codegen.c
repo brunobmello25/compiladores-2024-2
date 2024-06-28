@@ -3,6 +3,12 @@
 #include <string.h>
 #include "codegen.h"
 
+void DEBUGPRINT(char *prefix,char *msg) {
+    printf("-------------------\n");
+    printf("%s:\n%s\n", prefix, msg);
+    printf("-------------------\n");
+}
+
 char* generate_program(char* stmt_list) {
     return strdup(stmt_list);
 }
@@ -28,6 +34,16 @@ char* generate_print(char *expr) {
     return result;
 }
 
+char* generate_if_elseif(char *cond, char *stmt_list, char *elseif_stmt) {
+    size_t len = strlen(cond) + strlen(stmt_list) + strlen(elseif_stmt) + 18; // +18 for "if :\nelse:\n" and null terminator
+    char* result = malloc(len + 1); // +1 to ensure null terminator
+
+    snprintf(result, len + 1, "if %s:\n%s\n%s", cond, stmt_list, elseif_stmt);
+
+    DEBUGPRINT("generate_if_elseif result", result);
+    return result;
+}
+
 char* generate_if(char *cond, char *stmt_list, char *else_part) {
     size_t len = strlen(cond) + strlen(stmt_list) + (else_part ? strlen(else_part) : 0) + 18; // +18 for "if :\nelse:\n" and null terminator
     char* result = malloc(len + 1); // +1 to ensure null terminator
@@ -36,13 +52,19 @@ char* generate_if(char *cond, char *stmt_list, char *else_part) {
     } else {
         snprintf(result, len + 1, "if %s:\n%s", cond, stmt_list);
     }
+    DEBUGPRINT("generate_if result", result);
     return result;
 }
 
-char* generate_elseif(char *cond, char *stmt_list) {
-    size_t len = strlen(cond) + strlen(stmt_list) + 18; // +18 for "elif :\nelse:\n" and null terminator
+char* generate_elseif(char *cond, char *stmt_list, char *else_part) {
+    size_t len = strlen(cond) + strlen(stmt_list) + (else_part ? strlen(else_part) : 0) + 18; // +18 for "elif :\nelse:\n" and null terminator
     char* result = malloc(len + 1); // +1 to ensure null terminator
-    snprintf(result, len + 1, "elif %s:\n%s", cond, stmt_list);
+    if (else_part) {
+        snprintf(result, len + 1, "elif %s:\n%s\nelse:\n%s", cond, stmt_list, else_part);
+    } else {
+        snprintf(result, len + 1, "elif %s:\n%s", cond, stmt_list);
+    }
+    DEBUGPRINT("generate_elseif result", result);
     return result;
 }
 
