@@ -10,7 +10,7 @@ char* generate_if(char *cond, char *stmt_list, char *else_part);
 char* generate_if_elseif(char *cond, char *stmt_list, char *elseif_stmt);
 char* generate_elseif(char *cond, char *stmt_list, char *else_part);
 char* generate_while(char *cond, char *stmt_list);
-char* generate_for(char *id, char *start, char *end, char *stmt_list);
+char* generate_for(char *id, char *start, char *end, char *stmt_list, char *step);
 char* generate_input(char *id);
 char* generate_expression_statement(char *expr);
 char* generate_expression(char *expr);

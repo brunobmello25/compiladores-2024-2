@@ -108,10 +108,20 @@ char* generate_while(char *cond, char *stmt_list) {
     return result;
 }
 
-char* generate_for(char *id, char *start, char *end, char *stmt_list) {
-    size_t len = strlen(id) + strlen(start) + strlen(end) + strlen(stmt_list) + 20; // +20 for "for in range(, ):\n" and null terminator
-    char* result = malloc(len + 1); // +1 to ensure null terminator
-    snprintf(result, len + 1, "for %s in range(%s, %s):\n%s", id, start, end, stmt_list);
+char* generate_for(char *id, char *start, char *end, char *stmt_list, char *step) {
+    size_t len;
+    char* result;
+
+    if (step) {
+        len = strlen(id) + strlen(start) + strlen(end) + strlen(step) + strlen(stmt_list) + 30; // +30 for "for in range(, , ):\n" and null terminator
+        result = malloc(len + 1); // +1 to ensure null terminator
+        snprintf(result, len + 1, "for %s in range(%s, %s, %s):\n%s", id, start, end, step, stmt_list);
+    } else {
+        len = strlen(id) + strlen(start) + strlen(end) + strlen(stmt_list) + 20; // +20 for "for in range(, ):\n" and null terminator
+        result = malloc(len + 1); // +1 to ensure null terminator
+        snprintf(result, len + 1, "for %s in range(%s, %s):\n%s", id, start, end, stmt_list);
+    }
+
     return result;
 }
 

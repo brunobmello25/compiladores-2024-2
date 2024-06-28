@@ -24,6 +24,7 @@ STRING      \"([^\\\"]|\\.)*\"
 "NEXT"       { return NEXT; }
 "INPUT"      { return INPUT; }
 "LET"        { return LET; }
+"STEP"       { return STEP; }
 "="          { return ASSIGN; }
 "=="         { return EQ; }
 "!="         { return NE; }

@@ -23,7 +23,7 @@ int yylex(void);
 %token <num> NUMBER
 %token <id> IDENTIFIER
 %token <str> STRING
-%token PRINT IF THEN ELSE ELSEIF END WHILE DO FOR TO NEXT INPUT LET ASSIGN
+%token PRINT IF THEN ELSE ELSEIF END WHILE DO FOR TO NEXT INPUT LET ASSIGN STEP
 %token EQ NE LE GE
 
 %type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statements body
@@ -102,7 +102,10 @@ while_statement:
 
 for_statement:
     FOR IDENTIFIER ASSIGN expression TO expression DO body NEXT IDENTIFIER {
-        $$ = generate_for($2, $4, $6, $8);
+        $$ = generate_for($2, $4, $6, $8, NULL);
+    }
+    | FOR IDENTIFIER ASSIGN expression TO expression STEP expression DO body NEXT IDENTIFIER {
+        $$ = generate_for($2, $4, $6, $10, $8);
     }
     ;
 
