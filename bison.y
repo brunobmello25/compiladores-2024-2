@@ -26,7 +26,7 @@ int yylex(void);
 %token PRINT IF THEN ELSE ELSEIF END WHILE DO FOR TO NEXT INPUT LET ASSIGN
 %token EQ NE LE GE
 
-%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statements
+%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statements body
 
 %precedence IFX
 %nonassoc ELSE
@@ -64,44 +64,44 @@ print:
     }
     ;
 
+body:
+    statement_list { 
+        $$ = increase_indent($1); 
+    }
+    ;
+
 if_statement:
-    IF condition THEN statement_list END IF {
-        printf("a\n");
+    IF condition THEN body END IF {
         $$ = generate_if($2, $4, NULL);
     }
-    | IF condition THEN statement_list ELSE statement_list END IF {
-        printf("b\n");
+    | IF condition THEN body ELSE body END IF {
         $$ = generate_if($2, $4, $6);
     }
-    | IF condition THEN statement_list elseif_statements {
-        printf("c\n");
+    | IF condition THEN body elseif_statements {
         $$ = generate_if_elseif($2, $4, $5);
     }
     ;
 
 elseif_statements:
-    ELSEIF condition THEN statement_list END IF {
-        printf("d\n");
+    ELSEIF condition THEN body END IF {
         $$ = generate_elseif($2, $4, NULL);
     }
-    | ELSEIF condition THEN statement_list ELSE statement_list END IF {
-        printf("e\n");
+    | ELSEIF condition THEN body ELSE body END IF {
         $$ = generate_elseif($2, $4, $6);
     }
-    | ELSEIF condition THEN statement_list elseif_statements {
-        printf("f\n");
+    | ELSEIF condition THEN body elseif_statements {
         $$ = generate_elseif($2, $4, $5);
     }
     ;
 
 while_statement:
-    WHILE condition DO statement_list END WHILE {
+    WHILE condition DO body END WHILE {
         $$ = generate_while($2, $4);
     }
     ;
 
 for_statement:
-    FOR IDENTIFIER ASSIGN expression TO expression DO statement_list NEXT IDENTIFIER {
+    FOR IDENTIFIER ASSIGN expression TO expression DO body NEXT IDENTIFIER {
         $$ = generate_for($2, $4, $6, $8);
     }
     ;

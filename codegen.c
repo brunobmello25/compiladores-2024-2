@@ -3,6 +3,42 @@
 #include <string.h>
 #include "codegen.h"
 
+char *increase_indent(char *original) {
+    // Calculate the new length of the string
+    int original_len = strlen(original);
+    int newline_count = 0;
+    for (int i = 0; i < original_len; i++) {
+        if (original[i] == '\n') {
+            newline_count++;
+        }
+    }
+
+    // Allocate memory for the new string
+    // Each line gets 2 additional spaces, and we need one extra space for the null terminator
+    int new_len = original_len + newline_count * 2 + 2;
+    char *indented = (char *)malloc(new_len * sizeof(char));
+    if (!indented) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+
+    // Add indentation
+    int j = 0;
+    indented[j++] = ' ';
+    indented[j++] = ' ';
+    for (int i = 0; i < original_len; i++) {
+        indented[j++] = original[i];
+        if (original[i] == '\n') {
+            indented[j++] = ' ';
+            indented[j++] = ' ';
+        }
+    }
+    indented[j] = '\0';
+
+    free(original);
+    return indented;
+}
+
 void DEBUGPRINT(char *prefix,char *msg) {
     printf("-------------------\n");
     printf("%s:\n%s\n", prefix, msg);
@@ -40,7 +76,6 @@ char* generate_if_elseif(char *cond, char *stmt_list, char *elseif_stmt) {
 
     snprintf(result, len + 1, "if %s:\n%s\n%s", cond, stmt_list, elseif_stmt);
 
-    DEBUGPRINT("generate_if_elseif result", result);
     return result;
 }
 
@@ -52,7 +87,6 @@ char* generate_if(char *cond, char *stmt_list, char *else_part) {
     } else {
         snprintf(result, len + 1, "if %s:\n%s", cond, stmt_list);
     }
-    DEBUGPRINT("generate_if result", result);
     return result;
 }
 
@@ -64,7 +98,6 @@ char* generate_elseif(char *cond, char *stmt_list, char *else_part) {
     } else {
         snprintf(result, len + 1, "elif %s:\n%s", cond, stmt_list);
     }
-    DEBUGPRINT("generate_elseif result", result);
     return result;
 }
 

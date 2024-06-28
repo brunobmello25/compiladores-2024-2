@@ -1,6 +1,7 @@
 #ifndef CODEGEN_H
 #define CODEGEN_H
 
+char *increase_indent(char *original);
 char* generate_program(char* stmt_list);
 char* generate_statement_list(char* stmt1, char* stmt2);
 char* generate_assignment(char *id, char *expr);

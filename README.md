@@ -1,6 +1,8 @@
 # TODO:
 
 - [ ] Condições devem poder ser expressões avulsas
+- [ ] mudar size_t pra int pq a gente é burro demais pra saber que size_t existe
+
 
 # Gramática BASIC
 
