@@ -26,7 +26,7 @@ int yylex(void);
 %token PRINT IF THEN ELSE ELSEIF END WHILE DO FOR TO NEXT INPUT LET ASSIGN
 %token EQ NE LE GE
 
-%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op
+%type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statement
 
 %%
 
@@ -43,6 +43,7 @@ statement:
     assignment { $$ = $1; }
     | print { $$ = $1; }
     | if_statement { $$ = $1; }
+    | elseif_statement { $$ = $1; }
     | while_statement { $$ = $1; }
     | for_statement { $$ = $1; }
     | input { $$ = $1; }
@@ -69,6 +70,11 @@ if_statement:
         $$ = generate_if($2, $4, $6);
     }
     ;
+
+elseif_statement:
+    ELSEIF condition THEN statement_list {
+        $$ = generate_elseif($2, $4);
+    }
 
 while_statement:
     WHILE condition DO statement_list END WHILE {

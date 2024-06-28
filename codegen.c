@@ -39,6 +39,13 @@ char* generate_if(char *cond, char *stmt_list, char *else_part) {
     return result;
 }
 
+char* generate_elseif(char *cond, char *stmt_list) {
+    size_t len = strlen(cond) + strlen(stmt_list) + 18; // +18 for "elif :\nelse:\n" and null terminator
+    char* result = malloc(len + 1); // +1 to ensure null terminator
+    snprintf(result, len + 1, "elif %s:\n%s", cond, stmt_list);
+    return result;
+}
+
 char* generate_while(char *cond, char *stmt_list) {
     size_t len = strlen(cond) + strlen(stmt_list) + 10; // +10 for "while :\n" and null terminator
     char* result = malloc(len + 1); // +1 to ensure null terminator
