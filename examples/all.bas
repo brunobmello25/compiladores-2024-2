@@ -1,0 +1,4 @@
+LET A = 10
+WHILE A > 0 DO
+  A = A - 1
+END WHILE

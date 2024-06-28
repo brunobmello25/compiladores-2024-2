@@ -28,7 +28,7 @@ int yylex(void);
 
 %type <str> program statement_list statement assignment print if_statement while_statement for_statement input expression_statement expression term factor condition comparison_op elseif_statements body
 
-%precedence IFX
+// %precedence IFX
 %nonassoc ELSE
 
 %%
@@ -55,6 +55,9 @@ statement:
 assignment:
     LET IDENTIFIER ASSIGN expression {
         $$ = generate_assignment($2, $4);
+    }
+    | IDENTIFIER ASSIGN expression {
+        $$ = generate_assignment($1, $3);
     }
     ;
 
