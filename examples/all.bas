@@ -2,3 +2,17 @@ LET A = 10
 WHILE A > 0 DO
   A = A - 1
 END WHILE
+
+FOR I = 1 TO 10 DO
+  A = A + 1
+NEXT I
+
+LET X = 0
+WHILE X < 10 DO
+  X = X + 1
+  FOR I = 1 TO 5 STEP 2 DO
+    PRINT "I = " + I
+  NEXT I
+END WHILE
+
+PRINT A
