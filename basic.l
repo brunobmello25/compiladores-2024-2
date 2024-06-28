@@ -14,6 +14,7 @@ STRING      \"([^\\\"]|\\.)*\"
 "PRINT"      { return PRINT; }
 "IF"         { return IF; }
 "ELSE"       { return ELSE; }
+"ELSEIF"     { return ELSEIF; }
 "THEN"       { return THEN; }
 "END"        { return END; }
 "WHILE"      { return WHILE; }
@@ -23,7 +24,7 @@ STRING      \"([^\\\"]|\\.)*\"
 "NEXT"       { return NEXT; }
 "INPUT"      { return INPUT; }
 "LET"        { return LET; }
-"="          { return '='; }
+"="          { return ASSIGN; }
 "=="         { return EQ; }
 "!="         { return NE; }
 "<"          { return '<'; }

@@ -2,7 +2,7 @@ run:
 	cat ./example.bas | ./compiler
 
 build:
-	bison -d basic.y
+	bison -d -Wcounterexamples basic.y
 	flex basic.l
 	gcc -o compiler basic.tab.c lex.yy.c codegen.c -lfl
 
