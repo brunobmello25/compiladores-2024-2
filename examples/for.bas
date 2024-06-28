@@ -1,0 +1,6 @@
+FOR X = 1 TO 10 STEP 2 DO
+  PRINT 1
+  FOR Y = 1 TO 10 DO
+    PRINT 2
+  NEXT Y
+NEXT X

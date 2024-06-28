@@ -1,14 +1,15 @@
-run:
-	cat ./example.bas | ./compiler
+example ?= example
+
+run: build
+	cat ./examples/$(example).bas | ./compiler
 
 build:
-	bison -d -Wcounterexamples basic.y
-	flex basic.l
-	gcc -o compiler basic.tab.c lex.yy.c codegen.c -lfl
-
+	bison -d -Wcounterexamples bison.y
+	flex flex.l
+	gcc -o compiler bison.tab.c lex.yy.c codegen.c -lfl
 
 clean:
-	rm basic.tab.c 
-	rm basic.tab.h
-	rm lex.yy.c
-	rm compiler
+	rm -f bison.tab.c 
+	rm -f bison.tab.h
+	rm -f lex.yy.c
+	rm -f compiler

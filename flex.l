@@ -1,6 +1,6 @@
 %{
 #include "definitions.h"
-#include "basic.tab.h"
+#include "bison.tab.h"
 %}
 
 DIGIT       [0-9]
@@ -24,6 +24,7 @@ STRING      \"([^\\\"]|\\.)*\"
 "NEXT"       { return NEXT; }
 "INPUT"      { return INPUT; }
 "LET"        { return LET; }
+"STEP"       { return STEP; }
 "="          { return ASSIGN; }
 "=="         { return EQ; }
 "!="         { return NE; }

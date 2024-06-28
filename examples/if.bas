@@ -1,0 +1,11 @@
+IF A  > 0 THEN
+  IF B > 0 THEN
+    PRINT 1
+  ELSE
+    PRINT 2
+  END IF
+ELSEIF C > 0 THEN 
+  PRINT 3
+ELSE 
+  PRINT 4
+END IF
