@@ -1,6 +1,6 @@
 *.tab.c
 *.tab.h
-compiler
+compiladores
 lex.yy.c
 
 output/**

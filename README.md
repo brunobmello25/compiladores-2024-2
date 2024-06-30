@@ -19,7 +19,7 @@ O projeto possui a seguinte estrutura:
 - Arquivos `flex.l` e `bison.y`, com a implementação do trabalho prática.
 - Arquivos auxiliares `codegen.h` e `codegen.c`, para geração de código de saída.
 - Pasta `examples` com alguns arquivos de exemplo de programas na linguagem BASIC, para utilizar na entrada do programa.
-- Pasta `output` que armazena os arquivos de saída gerados pelo compilador (ver makefile para mais detalhes).
+- Pasta `output` que armazena os arquivos de saída gerados pelo programa (ver makefile para mais detalhes).
 
 ## Como rodar o projeto
 
@@ -34,5 +34,13 @@ O projeto possui a seguinte estrutura:
 - Se preferir, pode especificar qual caso de exemplo deseja rodar (`ls -l ./examples` para ver as opções disponíveis):
     - `make run EXAMPLE=for`
 
+### Com docker
+
+- Construir a imagem:
+    - `docker build -t compiladores .`
+- Rodar o container especificando o exemplo desejado:
+    - `docker run -it --rm compiladores example=for`
+
 ## Limitações e pendências
 
+- O projeto não possui tratamento de erros. Se ocorrer algum erro sintático ou léxico no código de entrada, o programa irá apenas escrever uma mensagem de erro e sair (o arquivo de saída ficará vazio).
