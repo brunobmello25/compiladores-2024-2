@@ -2,3 +2,4 @@
 *.tab.h
 compiler
 lex.yy.c
+output

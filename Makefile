@@ -1,7 +1,9 @@
-example ?= example
+example ?= all
 
-run: build
-	cat ./examples/$(example).bas | ./compiler
+run:
+	@mkdir -p ./output
+	@cat ./examples/$(example).bas | ./compiler > ./output/$(example).py
+	@echo "Output writen to \"./output/$(example).py\""
 
 build:
 	bison -d -Wcounterexamples bison.y

@@ -1,5 +1,4 @@
 %{
-#include "definitions.h"
 #include "bison.tab.h"
 %}
 
