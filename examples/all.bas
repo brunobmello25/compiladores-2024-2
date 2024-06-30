@@ -19,4 +19,6 @@ FOR J = 1 TO 5 STEP 2 DO
   PRINT J
 NEXT J
 
+LET X = (1 -2 + (3-4) * 5) / 6
+
 PRINT A
