@@ -157,7 +157,8 @@ factor:
         $$ = strdup($1);
     }
     | '(' expression ')' {
-        $$ = strdup($2);
+        $$ = malloc(strlen($2) + 3);
+        sprintf($$, "(%s)", $2);
     }
     ;
 
